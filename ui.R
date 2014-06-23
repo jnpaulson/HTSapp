@@ -29,8 +29,9 @@ shinyUI(fluidPage(
 
     column(3, wellPanel(
       selectInput("input_type", "Input type",
-        c("slider", "text", "numeric", "checkbox",
-          "checkboxGroup", "radioButtons", "selectInput",
+        c("checkboxGroup","checkboxGroup1","checkboxGroup2",
+          "slider", "text", "numeric", "checkbox",
+          "radioButtons", "selectInput",
           "selectInput (multi)", "date", "daterange"
         )
       )
@@ -45,7 +46,9 @@ shinyUI(fluidPage(
       tags$p("Input type:"),
       verbatimTextOutput("input_type_text"),
       tags$p("Dynamic input value:"),
-      verbatimTextOutput("dynamic_value")
+      verbatimTextOutput("dynamic_value"),
+      tags$p("Values from input value:"),
+      verbatimTextOutput("unique_levels")
     )
   )
 ))

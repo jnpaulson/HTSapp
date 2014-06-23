@@ -23,6 +23,16 @@ downloadNotInstalledBioc(requiredBiocPackages)
 data(mouseData)
 data(lungData)
 
+
+choiceValues = colnames(pData(msd16s))
+names(choiceValues) = choiceValues
+
+choiceValues1 = colnames(pData(lungData))
+names(choiceValues1) = choiceValues1
+
+choiceValues2 = colnames(pData(mouseData))
+names(choiceValues2) = choiceValues2
+
 shinyServer(function(input, output) {
 
   output$ui <- renderUI({
@@ -40,11 +50,18 @@ shinyServer(function(input, output) {
                                 value = 12),
       "checkbox" = checkboxInput("dynamic", "Dynamic",
                                  value = TRUE),
-      "checkboxGroup" = checkboxGroupInput("dynamic", "Dynamic",
-        choices = c("Option 1" = "option1",
-                    "Option 2" = "option2"),
-        selected = "option2"
+      "checkboxGroup" = checkboxGroupInput("dynamic", "Phenotype",
+        choices = choiceValues,
+        selected = choiceValues[1]
       ),
+      "checkboxGroup1" = checkboxGroupInput("dynamic", "Phenotype",
+        choices = choiceValues1,
+        selected = choiceValues1[1]
+      ),
+      "checkboxGroup2" = checkboxGroupInput("dynamic", "Phenotype",
+        choices = choiceValues2,
+        selected = choiceValues2[1]
+      ),            
       "radioButtons" = radioButtons("dynamic", "Dynamic",
         choices = c("Option 1" = "option1",
                     "Option 2" = "option2"),
@@ -73,6 +90,24 @@ shinyServer(function(input, output) {
   output$dynamic_value <- renderPrint({
     str(input$dynamic)
   })
-
+  
+  output$unique_levels <- renderPrint({
+    if(input$input_type == "checkboxGroup") {
+      out = sapply(input$dynamic,function(i){
+              as.character(unique(pData(msd16s)[,i]))
+      })
+    }
+    if(input$input_type == "checkboxGroup1") {
+      out = sapply(input$dynamic,function(i){
+              as.character(unique(pData(lungData)[,i]))
+      })
+    }
+    if(input$input_type == "checkboxGroup2") {
+      out = sapply(input$dynamic,function(i){
+              as.character(unique(pData(mouseData)[,i]))
+      })
+    }        
+    out
+  })
 })
 
