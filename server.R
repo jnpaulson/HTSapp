@@ -1,3 +1,28 @@
+downloadNotInstalled<-function(x){
+    for(i in x){
+      if(!require(i,character.only=TRUE)){
+        install.packages(i,repos="http://cran.r-project.org")
+        library(i,character.only=TRUE)
+      }
+    }
+}
+downloadNotInstalledBioc<-function(x){
+    for(i in x){
+      if(!require(i,character.only=TRUE)){
+        source("http://bioconductor.org/biocLite.R")
+        biocLite(i,character.only=TRUE)
+        library(i,character.only=TRUE)
+      }
+    }
+}
+requiredPackages = c("shiny","vegan")
+downloadNotInstalled(requiredPackages)
+requiredBiocPackages = c("metagenomeSeq","msd16s")
+downloadNotInstalledBioc(requiredBiocPackages)
+
+data(mouseData)
+data(lungData)
+
 shinyServer(function(input, output) {
 
   output$ui <- renderUI({
